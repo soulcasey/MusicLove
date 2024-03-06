@@ -1,14 +1,14 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using MusicLove.Models;
 
 namespace MusicLove.Data;
 
-public class MusicLoveContext : IdentityDbContext<IdentityUser>
+public class AppDbContext : IdentityDbContext
 {
-    public MusicLoveContext(DbContextOptions<MusicLoveContext> options)
-        : base(options)
+    public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
     {
+        
     }
 
     protected override void OnModelCreating(ModelBuilder builder)
@@ -18,4 +18,8 @@ public class MusicLoveContext : IdentityDbContext<IdentityUser>
         // For example, you can rename the ASP.NET Identity table names and more.
         // Add your customizations after calling base.OnModelCreating(builder);
     }
+
+    // public DbSet<Info> Infos { get; set; }
+    // public DbSet<Animal> Animals { get; set; }
+    public DbSet<Blog> Blogs { get; set; }
 }
