@@ -40,11 +40,13 @@ public class BlogController : Controller
         return View("List", blogListViewModel);
     }
 
+    [Authorize]
     public IActionResult Create()
     {
         return View("Create");
     }
 
+    [Authorize]
     [HttpPost]
     public async Task<IActionResult> Add(Blog newBlog, IFormFile file)
     {
@@ -77,6 +79,7 @@ public class BlogController : Controller
         }
     }
 
+    [Authorize]
     public IActionResult Post(int id)
     {
         Blog blogModel = blogRepository.Get(blog => blog.Id == id);

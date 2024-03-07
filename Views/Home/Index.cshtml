@@ -140,16 +140,16 @@
         }, 800);
     });
 
-    var mapContainer = document.getElementById('map'), 
-    	mapOption = { 
-        center: new kakao.maps.LatLng(37.480926726771806,127.14228989281123), 
-        level: 4 
-    };
-    var map = new kakao.maps.Map(mapContainer, mapOption);
     var markerPosition  = new kakao.maps.LatLng(37.480926726771806,127.14228989281123); 
     var marker = new kakao.maps.Marker({
         position: markerPosition
     });
 
-    marker.setMap(map);
+    var mapContainer = document.getElementById('map'), 
+    	mapOption = { 
+        center: new kakao.maps.LatLng(37.480926726771806,127.14228989281123), 
+        level: 3,
+        marker: marker 
+    };
+    var map = new kakao.maps.StaticMap(mapContainer, mapOption);
 </script>
