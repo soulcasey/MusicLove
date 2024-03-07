@@ -1,0 +1,59 @@
+@model Blog
+
+@{
+    ViewData["Title"] = "Create Blog";
+}
+
+<form asp-controller = "Blog" enctype = "multipart/form-data">
+    <div class = "border p-3 mt-4">
+
+        <div class = "mb-3 row p-1">
+            <label asp-for = "Title" class = "p-0"></label>
+            <input asp-for = "Title" class = "form-control"/>
+            <span asp-validation-for = "Title" class = "text-danger"></span>
+        </div>
+        
+        <div class = "mb-3 row p-1">
+            <label asp-for = "Image" class = "p-0"></label>
+            <input type = "file" name = "file" id="imageInput" class = "form-control" onchange="displayImage()"/>
+            <img id="previewImage" style="display:none; width: 300px; height: auto; margin-top: 15px" />
+        </div>
+
+        <div class = "mb-3 row p-1">
+            <label asp-for = "Description" class = "p-0"></label>
+            <textarea asp-for = "Description" class = "form-control"></textarea>
+        </div>
+
+        <button type = "submit" asp-action = "Add" method = "post" class = "btn btn-primary">
+            +
+        </button>
+    </div>
+</form>
+
+@section Scripts {
+    <script>
+        tinymce.init({
+            selector: 'textarea',
+            menubar: false,
+            plugins: 'lists emoticons charmap',
+            toolbar: 'undo redo | fontsize | forecolor backcolor | bold italic underline strikethrough | numlist bullist indent outdent | emoticons charmap',
+        });
+
+        function displayImage() {
+            const imageInput = document.getElementById("imageInput");
+            const previewImage = document.getElementById("previewImage");
+
+            if (imageInput.files && imageInput.files[0]) {
+                const reader = new FileReader();
+
+                reader.onload = function (e) {
+                    previewImage.src = e.target.result;
+                    previewImage.style.display = "block";
+                };
+
+                reader.readAsDataURL(imageInput.files[0]);
+            }
+        }
+
+    </script>
+}

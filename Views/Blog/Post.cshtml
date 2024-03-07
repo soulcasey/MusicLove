@@ -1,0 +1,32 @@
+@model Blog
+
+@{
+    ViewData["Title"] = @Model.Title;
+}
+
+<div>
+    <h1 class="display-4 text-center">@Model.Title</h1>
+    <p class="text-sm-left" style="margin-left:10px;" >
+        @Model.Author • @Model.DateTime.ToString("yyyy-MM-dd")
+    </p>
+    <hr style="margin: 5px 10px 50px 10px;">
+
+    <div class="row">
+        <div class="col-md-8 mb-4 mb-md-0">
+            <div class="text-center">
+                <img   
+                    src= @Model.Image
+                    style="object-fit: cover;"
+                    class="shadow-1-strong rounded blog-image" 
+                    onerror="this.src = '@Define.Azure.DEFAULT_IMAGE'"
+                >
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-4 mb-md-0">
+            <span class="border">
+                @Html.Raw(@Model.Description)
+            </span>
+        </div>
+    </div>
+</div>
