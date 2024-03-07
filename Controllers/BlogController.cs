@@ -78,8 +78,7 @@ public class BlogController : Controller
             return RedirectToAction("Index");
         }
     }
-
-    [Authorize]
+    
     public IActionResult Post(int id)
     {
         Blog blogModel = blogRepository.Get(blog => blog.Id == id);
