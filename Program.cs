@@ -3,6 +3,8 @@ using MusicLove.Data;
 using MusicLove.Data.Repository;
 using MusicLove.Azure;
 using Microsoft.AspNetCore.Identity;
+using MusicLove;
+using Microsoft.AspNetCore.Identity.UI.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +14,7 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkSto
 
 builder.Services.AddRazorPages();
 builder.Services.AddScoped<IBlogRepository, BlogRepository>();
+builder.Services.AddScoped<IEmailSender, EmailSender>();
 builder.Services.AddSingleton<IAzureStorage, AzureStorage>();
 
 builder.Services.Configure<IdentityOptions>(options =>

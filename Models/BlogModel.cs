@@ -10,13 +10,13 @@ public class Blog
     public int Id { get; set; }
     
     [Required]
-    public string Title { get; set; }
+    public required string Title { get; set; }
     
     [DisplayName("Image")]
-    public string Image { get; set; }
+    public string? Image { get; set; }
 
     [Required]
-    public string Description { get; set; }
+    public required string Description { get; set; }
 
     [Required]
     public string Author { get; set; } = "Casey"; // Temporary
