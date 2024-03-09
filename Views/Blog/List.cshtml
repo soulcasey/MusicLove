@@ -3,8 +3,18 @@
 @{
     ViewData["Title"] = "Blog";
 }
+<h1>@ViewData["Title"]</h1>
 
 <form asp-controller = "Blog" enctype = "multipart/form-data">
+
+    @if(User.Identity.IsAuthenticated)
+    {
+        <div class="mb-5 text-center" >
+            <button asp-action = "Create" class = "btn btn-primary" type = "submit">
+                +
+            </button>
+        </div>
+    }
 
     @if (Model.Blogs.Count == 0)
     {
@@ -39,12 +49,6 @@
             }
         }
     }
-
-    <div>
-        <button asp-action = "Create" class = "btn btn-primary" type = "submit">
-            +
-        </button>
-    </div>
 
 </form>
 

@@ -3,13 +3,30 @@
 @{
     ViewData["Title"] = @Model.Title;
 }
+<h1>@Model.Title</h1>
 
 <div>
-    <h1 class="display-4 text-center">@Model.Title</h1>
-    <p class="text-sm-left" style="margin-left:10px;" >
-        @Model.Author • @Model.DateTime.ToString("yyyy-MM-dd")
-    </p>
-    <hr style="margin: 5px 10px 50px 10px;">
+    <div class="row">
+        <div class="col">
+            <p>
+                @Model.Author • @Model.DateTime.ToString("yyyy-MM-dd")
+            </p>
+        </div>
+
+        @if(User.Identity.IsAuthenticated)
+        {
+            <div class="col d-flex justify-content-end">
+                <a asp-area="" asp-controller="Blog" asp-action="Post" asp-route-id="@Model.Id" style="margin-right:10px;">
+                    Edit
+                </a>
+                <a asp-area="" asp-controller="Blog" asp-action="Post" asp-route-id="@Model.Id">
+                    Delete
+                </a>
+            </div>
+        }
+    </div>
+
+    <hr style="margin: 5px 0px 50px 0px;">
 
     <div class="row">
         <div class="col-md-8 mb-4 mb-md-0">

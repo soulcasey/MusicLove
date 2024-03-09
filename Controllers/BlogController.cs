@@ -94,4 +94,10 @@ public class BlogController : Controller
             return View("Post", blogModel);
         }
     }
+
+    [Authorize]
+    public IActionResult Edit()
+    {
+        return View("Create");
+    }
 }
