@@ -38,7 +38,7 @@
                 Edit
             </button>
 
-            <button onclick="deletePost('@Model.Id')">
+            <button id="deleteConfirmButton" onclick="deleteConfirm('@Model.Id')">
                 Delete
             </button>
         </div>
@@ -46,22 +46,21 @@
 }
 
 <script>
-    function deletePost(postId) {
-        if (confirm('Are you sure you want to delete this post?')) {
-            fetch(`/Blog/Delete/${postId}`, {
+    // Prevent clicking confirm button from automatically refreshing page
+    document.getElementById("deleteConfirmButton").addEventListener("click", function(event) {
+        event.preventDefault();
+    });
+
+    function deleteConfirm(id) {
+        var result = window.confirm("Are you sure you want to delete this post?");
+        if (result) {
+            fetch(`/Blog/Delete/${id}`, {
                 method: 'DELETE'
             })
             .then(response => {
-                if (response.ok) {
-                    // If deletion is successful, redirect to the index page
-                    window.location.href = '/Blog/Index';
-                } else {
-                    // Handle error
-                    console.error('Failed to delete post.');
-                }
+                window.location.href = '/Blog';
             })
             .catch(error => {
-                // Handle network error
                 console.error('Error:', error);
             });
         }

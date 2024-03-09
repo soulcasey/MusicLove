@@ -114,12 +114,12 @@ public class BlogController : Controller
             azureStorage.DeleteFile(blogModel.Image.Replace(Define.Azure.BLOB_URL, string.Empty));
 
             TempData[Define.Toastr.SUCCESS] = "Removed Successfully!";
+            return Ok();
         }
         else
         {
             TempData[Define.Toastr.ERROR] = "Remove Failed";
+            return NotFound();
         }
-
-        return Ok();
     }
 }
