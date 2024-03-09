@@ -30,6 +30,8 @@ background: #B5BEF5;
 .blog-image {
   width: 90%;
   height: auto;
+  outline-style: solid;
+  outline-color: grey;
 }
 
 .landing-parent {

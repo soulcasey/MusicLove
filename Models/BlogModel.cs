@@ -19,8 +19,7 @@ public class Blog
     [Required]
     public required string Description { get; set; }
 
-    [Required]
-    public string Author { get; set; } = "Casey"; // Temporary
+    public string? Author { get; set; } // Temporary
 
     [Required, DataType(DataType.DateTime)]
     public DateTime DateTime { get; set; } = DateTime.Now;

@@ -70,6 +70,8 @@ public class BlogController : Controller
                 newBlog.Image = Define.Azure.BLOB_URL + blobName;
             }
 
+            newBlog.Author = User.Identity.Name;
+
             blogRepository.Add(newBlog);
             blogRepository.Save();
 
