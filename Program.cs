@@ -26,6 +26,7 @@ builder.Services.Configure<IdentityOptions>(options =>
     options.Password.RequireUppercase = false;
     options.Password.RequiredLength = 6;
     options.Password.RequiredUniqueChars = 0;
+    options.User.RequireUniqueEmail = true;
 });
 
 builder.Services.AddDistributedMemoryCache();
