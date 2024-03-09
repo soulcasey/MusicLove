@@ -93,6 +93,8 @@ background: #B5BEF5;
   width: 100%;
   aspect-ratio: 4 / 3;
   object-fit: cover;
+  outline-style: solid;
+  outline-color: grey;
 }
 
 @media (min-width:768px) {

@@ -34,7 +34,7 @@ public class BlogController : Controller
     {
         BlogListViewModel blogListViewModel = new()
         {
-            Blogs = blogRepository.GetAll().ToList()
+            Blogs = blogRepository.GetAll().Reverse().ToList()
         };
 
         return View("List", blogListViewModel);
@@ -48,7 +48,7 @@ public class BlogController : Controller
 
     [Authorize]
     [HttpPost]
-    public async Task<IActionResult> Add(Blog newBlog, IFormFile file)
+    public async Task<IActionResult> Add(Blog newBlog, IFormFile? file)
     {
         if (ModelState.IsValid == false)
         {

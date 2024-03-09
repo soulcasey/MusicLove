@@ -10,10 +10,11 @@ public class Blog
     public int Id { get; set; }
     
     [Required]
+    [MaxLength(20)]
     public required string Title { get; set; }
     
     [DisplayName("Image")]
-    public string? Image { get; set; }
+    public string Image { get; set; } = string.Empty;
 
     [Required]
     public required string Description { get; set; }

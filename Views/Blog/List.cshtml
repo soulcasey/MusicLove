@@ -24,11 +24,12 @@
                     <a asp-area="" asp-controller="Blog" asp-action="Post" asp-route-id="@Model.Blogs[i].Id">
                         <img   
                             src= @Model.Blogs[i].Image
+                            style="object-fit: cover;"
                             class="shadow-1-strong rounded blog-image-thumbnail"
                             onerror="this.src = '@Define.Azure.DEFAULT_IMAGE'"
                         >
                     </a>
-                    <p class="text-center">@Model.Blogs[i].Title</p>
+                    <h4 class="mb-5 mt-3">@Model.Blogs[i].Title</h4>
                 </div>
             </div>
 
@@ -46,3 +47,13 @@
     </div>
 
 </form>
+
+<script>
+    function handleImageError(image) {
+        // Add class to the image
+        image.classList.add('shadow-1-strong rounded blog-image-thumbnail');
+
+        // Change the image source
+        image.src = '@Define.Azure.DEFAULT_IMAGE';
+    }
+</script>
