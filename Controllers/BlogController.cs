@@ -100,4 +100,26 @@ public class BlogController : Controller
     {
         return View("Create");
     }
+
+    [Authorize]
+    [HttpDelete]
+    public IActionResult Delete(int id)
+    {
+        Blog blogModel = blogRepository.Get(blog => blog.Id == id);
+
+        if (blogModel != null)
+        {
+            blogRepository.Delete(blogModel);
+            blogRepository.Save();
+            azureStorage.DeleteFile(blogModel.Image.Replace(Define.Azure.BLOB_URL, string.Empty));
+
+            TempData[Define.Toastr.SUCCESS] = "Removed Successfully!";
+        }
+        else
+        {
+            TempData[Define.Toastr.ERROR] = "Remove Failed";
+        }
+
+        return Ok();
+    }
 }

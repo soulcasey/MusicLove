@@ -5,45 +5,65 @@
 }
 <h1>@Model.Title</h1>
 
-<div>
-    <div class="row">
-        <div class="col">
-            <p>
-                @Model.Author • @Model.DateTime.ToString("yyyy-MM-dd")
-            </p>
-        </div>
+<p>
+    @Model.Author • @Model.DateTime.ToString("yyyy-MM-dd")
+</p>
 
-        @if(User.Identity.IsAuthenticated)
-        {
-            <div class="col d-flex justify-content-end">
-                <a asp-area="" asp-controller="Blog" asp-action="Post" asp-route-id="@Model.Id" style="margin-right:10px;">
-                    Edit
-                </a>
-                <a asp-area="" asp-controller="Blog" asp-action="Post" asp-route-id="@Model.Id">
-                    Delete
-                </a>
-            </div>
-        }
+<hr style="margin: 5px 0px 50px 0px;">
+
+<div class="row">
+    <div class="col-md-8 mb-4 mb-md-0">
+        <div class="text-center">
+            <img   
+                src= @Model.Image
+                style="object-fit: cover;"
+                class="shadow-1-strong rounded blog-image" 
+                onerror="this.src = '@Define.Azure.DEFAULT_IMAGE'"
+            >
+        </div>
     </div>
 
-    <hr style="margin: 5px 0px 50px 0px;">
-
-    <div class="row">
-        <div class="col-md-8 mb-4 mb-md-0">
-            <div class="text-center">
-                <img   
-                    src= @Model.Image
-                    style="object-fit: cover;"
-                    class="shadow-1-strong rounded blog-image" 
-                    onerror="this.src = '@Define.Azure.DEFAULT_IMAGE'"
-                >
-            </div>
-        </div>
-
-        <div class="col-md-4 mb-4 mb-md-0">
-            <span class="border">
-                @Html.Raw(@Model.Description)
-            </span>
-        </div>
+    <div class="col-md-4 mb-4 mb-md-0">
+        <span class="border">
+            @Html.Raw(@Model.Description)
+        </span>
     </div>
 </div>
+
+@if(User.Identity.IsAuthenticated)
+{
+    <form asp-controller = "Blog" enctype = "multipart/form-data">
+        <div class="d-flex justify-content-center mt-4">
+            <button asp-controller="Blog" asp-action="Post" asp-route-id="@Model.Id" style="margin-right:10px;">
+                Edit
+            </button>
+
+            <button onclick="deletePost('@Model.Id')">
+                Delete
+            </button>
+        </div>
+    </form>
+}
+
+<script>
+    function deletePost(postId) {
+        if (confirm('Are you sure you want to delete this post?')) {
+            fetch(`/Blog/Delete/${postId}`, {
+                method: 'DELETE'
+            })
+            .then(response => {
+                if (response.ok) {
+                    // If deletion is successful, redirect to the index page
+                    window.location.href = '/Blog/Index';
+                } else {
+                    // Handle error
+                    console.error('Failed to delete post.');
+                }
+            })
+            .catch(error => {
+                // Handle network error
+                console.error('Error:', error);
+            });
+        }
+    }
+</script>

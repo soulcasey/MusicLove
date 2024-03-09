@@ -113,6 +113,7 @@ namespace MusicLove.Areas.Identity.Pages.Account
                 var result = await _signInManager.PasswordSignInAsync(Input.Username, Input.Password, Input.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
+                    TempData[Define.Toastr.SUCCESS] = "Login Success!";
                     _logger.LogInformation("User logged in.");
                     return LocalRedirect(returnUrl);
                 }
