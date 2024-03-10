@@ -57,10 +57,25 @@ public class BlogController : Controller
     }
 
     [Authorize]
-    public IActionResult Create()
+    public IActionResult Create(int? id = null)
     {
-        return View("Create");
+        if (id == null)
+        {
+            return View("Create");
+        }
+
+        Blog blogModel = blogRepository.Get(blog => blog.Id == id);
+
+        if (blogModel == null)
+        {
+            return View("Create");
+        }
+        else
+        {
+            return View("Create", blogModel);
+        }
     }
+
 
     [Authorize]
     [HttpPost]
@@ -71,7 +86,7 @@ public class BlogController : Controller
             TempData[Define.Toastr.ERROR] = "Error";
             return View("Create", newBlog);
         }
-        else if (blogRepository.Exists(blog => blog.Title == newBlog.Title) == true)
+        else if (blogRepository.Exists(blog => blog.Title == newBlog.Title && blog.Id != newBlog.Id) == true)
         {
             TempData[Define.Toastr.ERROR] = "Duplicate Title";
             return View("Create", newBlog);
@@ -93,7 +108,7 @@ public class BlogController : Controller
 
             TempData[Define.Toastr.SUCCESS] = "Added successfully";
 
-            return RedirectToAction("Index");
+            return Index();
         }
     }
     
@@ -109,12 +124,6 @@ public class BlogController : Controller
         {
             return View("Post", blogModel);
         }
-    }
-
-    [Authorize]
-    public IActionResult Edit()
-    {
-        return View("Create");
     }
 
     [Authorize]
