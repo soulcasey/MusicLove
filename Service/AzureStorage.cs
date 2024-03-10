@@ -9,7 +9,7 @@ public class AzureStorage : IAzureStorage
 
     public AzureStorage(IConfiguration configuration)
     {
-        blobServiceClient = new BlobServiceClient(configuration.GetConnectionString(Define.ConnectionString.BLOB));
+        blobServiceClient = new BlobServiceClient(configuration.GetConnectionString(Define.ConnectionString.AZURE_BLOB));
     }
 
     public async Task UploadFile(IFormFile file, string blobName)

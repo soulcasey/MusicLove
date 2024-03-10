@@ -18,8 +18,9 @@ public static class Define
 
     public static class ConnectionString
     {
-        public const string DATABASE = "database";
-        public const string BLOB = "blob";
+        public const string SQL_SERVER = "SqlServer";
+        public const string AZURE_BLOB = "AzureBlob";
+        public const string AZURE_SQL = "AzureSQL";
     }
 
     public static class Azure
