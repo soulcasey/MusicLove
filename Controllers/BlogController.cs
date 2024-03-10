@@ -32,12 +32,28 @@ public class BlogController : Controller
 
     public IActionResult List()
     {
-        BlogListViewModel blogListViewModel = new()
-        {
-            Blogs = blogRepository.GetAll().Reverse().ToList()
-        };
+        return View("List");
+    }
 
-        return View("List", blogListViewModel);
+    public IActionResult GetNextBlogs(int skip, int take)
+    {
+        List<Blog> blogs = blogRepository.GetAll().Reverse().ToList();
+        BlogListViewModel blogListViewModel = new BlogListViewModel();
+
+        if (blogs.Count < skip)
+        {
+            blogListViewModel.Blogs = new List<Blog>();
+        }
+        else if (blogs.Count < skip + take)
+        {
+            blogListViewModel.Blogs = blogs.GetRange(skip, blogs.Count - skip);
+        }
+        else
+        {
+            blogListViewModel.Blogs = blogs.GetRange(skip, take);
+        }
+
+        return PartialView("ListPartial", blogListViewModel);
     }
 
     [Authorize]
