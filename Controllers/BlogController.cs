@@ -43,14 +43,17 @@ public class BlogController : Controller
         if (blogs.Count < skip)
         {
             blogListViewModel.Blogs = new List<Blog>();
+            blogListViewModel.Last = true;
         }
-        else if (blogs.Count < skip + take)
+        else if (blogs.Count <= skip + take)
         {
             blogListViewModel.Blogs = blogs.GetRange(skip, blogs.Count - skip);
+            blogListViewModel.Last = true;
         }
         else
         {
             blogListViewModel.Blogs = blogs.GetRange(skip, take);
+            blogListViewModel.Last = false;
         }
 
         return PartialView("ListPartial", blogListViewModel);

@@ -21,9 +21,7 @@
     <div class="mb-5 text-center">
         <button id="loadMoreButton" class="btn btn-primary" style="width: 140px;">
             <div id="loadingSpinner" class="spinner-border spinner-border-sm mr-2" style="display: none;" role="status"></div>
-            <div id="loadMoreText">
-                Load More
-            </div>
+            <div id="loadMoreText">Load More</div>
         </button>
     </div>
 
@@ -55,8 +53,15 @@
             data: { skip: currentCount, take: take },
             success: function (data) {
                 $('#blogsContainer').append(data);
-                currentCount += take; // Increment skip for next call
-                buttonStatus(true);
+                var last = $(data).filter('#Last').val();
+                if (last === "True") {
+                    $('#loadMoreButton').hide();
+                }
+                else
+                {
+                    currentCount += take; // Increment skip for next call
+                    buttonStatus(true);
+                }
             },
             error: function (xhr, status, error) {
                 console.error(xhr.responseText);
