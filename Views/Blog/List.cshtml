@@ -3,12 +3,12 @@
 }
 <h1>@ViewData["Title"]</h1>
 
-<form asp-controller = "Blog" enctype = "multipart/form-data">
+<form asp-controller="Blog" enctype="multipart/form-data">
 
     @if(User.Identity.IsAuthenticated)
     {
-        <div class="mb-5 text-center" >
-            <button asp-action = "Create" class = "btn btn-primary" type = "submit">
+        <div class="mb-5 text-center">
+            <button asp-action="Create" class="btn btn-primary" type="submit">
                 Create
             </button>
         </div>
@@ -19,7 +19,12 @@
     </div>
 
     <div class="mb-5 text-center">
-        <button id="loadMoreButton" class="btn btn-primary">Load More</button>
+        <button id="loadMoreButton" class="btn btn-primary" style="width: 140px;">
+            <div id="loadingSpinner" class="spinner-border spinner-border-sm mr-2" style="display: none;" role="status"></div>
+            <div id="loadMoreText">
+                Load More
+            </div>
+        </button>
     </div>
 
 </form>
@@ -32,10 +37,12 @@
     $(document).ready(function () {
         // Load initial set of blogs
         loadNextBlogs(takeCount);
+        buttonStatus(false);
 
         // Load more blogs when button is clicked
         $('#loadMoreButton').click(function (event) {
             event.preventDefault(); // Prevent default form submission behavior
+            buttonStatus(false);
             loadNextBlogs(takeCount);
         });
     });
@@ -49,18 +56,25 @@
             success: function (data) {
                 $('#blogsContainer').append(data);
                 currentCount += take; // Increment skip for next call
+                buttonStatus(true);
             },
             error: function (xhr, status, error) {
                 console.error(xhr.responseText);
+                buttonStatus(true);
             }
         });
     }
 
-    function handleImageError(image) {
-        // Add class to the image
-        image.classList.add('shadow-1-strong rounded blog-image-thumbnail');
-
-        // Change the image source
-        image.src = '@Define.Azure.DEFAULT_IMAGE';
+    function buttonStatus(active) {
+        if (active == true) {
+            $('#loadingSpinner').hide();
+            $('#loadMoreText').show();
+            $('#loadMoreButton').prop('disabled', false);
+        }
+        else {
+            $('#loadingSpinner').show();
+            $('#loadMoreText').hide();
+            $('#loadMoreButton').prop('disabled', true);
+        }
     }
 </script>
