@@ -60,22 +60,23 @@ public class BlogController : Controller
     }
 
     [Authorize]
-    public IActionResult Create(int? id = null)
+    public IActionResult Create()
     {
-        if (id == null)
-        {
-            return View("Create");
-        }
+        return View("Create");
+    }
 
+    [Authorize]
+    public IActionResult Edit(int id)
+    {
         Blog blogModel = blogRepository.Get(blog => blog.Id == id);
 
         if (blogModel == null)
         {
-            return View("Create");
+            return Index();
         }
         else
         {
-            return View("Create", blogModel);
+            return View("Edit", blogModel);
         }
     }
 
@@ -113,6 +114,28 @@ public class BlogController : Controller
 
             return Index();
         }
+    }
+
+    [Authorize]
+    [HttpPost]
+    public IActionResult Update(Blog newBlog)
+    {
+        Blog targetBlog = blogRepository.Get(blog => blog.Id == newBlog.Id);
+
+        if (targetBlog == null)
+        {
+            TempData[Define.Toastr.ERROR] = "Error";
+            return View("Edit", newBlog);
+        }
+
+        targetBlog.Description = newBlog.Description; // For now, only update description
+        blogRepository.Update(targetBlog);
+        blogRepository.Save();
+
+        TempData[Define.Toastr.SUCCESS] = "Updated successfully";
+
+        return Index();
+        
     }
     
     public IActionResult Post(int id)
