@@ -9,14 +9,37 @@
 
         <div class = "mb-3 row p-1">
             <label asp-for = "Title" class = "p-0"></label>
-            <input id="titleInput" asp-for = "Title" class = "form-control"/>
+            <input asp-for = "Title" class = "form-control blockInputEnter"/>
             <span asp-validation-for = "Title" class = "text-danger"></span>
         </div>
         
         <div class = "mb-3 row p-1">
-            <label asp-for = "Image" class = "p-0"></label>
-            <input type = "file" name = "file" id="imageInput" class = "form-control" onchange="displayImage()"/>
-            <img id="previewImage" style="display:none; width: 300px; height: auto; margin-top: 15px" />
+            <label class = "p-0">Media</label>
+            <div class="container">
+                <label class="form-check-label radio-inline" for="noneRadio">
+                    <input class="form-check-input" type="radio" id="noneRadio" name="mediaType" checked onchange="setMediaSelection()">
+                    None
+                </label>
+                <label class="form-check-label radio-inline" for="imageRadio">
+                    <input class="form-check-input" type="radio" id="imageRadio" name="mediaType" onchange="setMediaSelection()">
+                    Image
+                </label>
+                <label class="form-check-label radio-inline" for="youTubeRadio">  
+                    <input class="form-check-input" type="radio" id="youTubeRadio" name="mediaType" onchange="setMediaSelection()">
+                    YouTube
+                </label>
+            </div>
+
+            <input id="imageInput" type = "file" name = "file" class = "form-control" style="display: none;" onchange="displayImage()"/>
+            <img id="imagePreview" style="display:none; width: 300px; height: auto; margin-top: 15px" />
+
+            
+             <div class="input-group mb-3" style="display: none;" id="youTubeInput">
+                <input type="text" id="youtubeLinkInput" class="form-control blockInputEnter">
+                <button class="btn btn-success" type="button" onclick="displayYouTube()">Add</button>
+            </div>
+            <img id="youTubePreview" style="display:none; width: 300px; height: auto; margin-top: 15px" />
+        
         </div>
 
         <div class = "mb-3 row p-1">
@@ -34,32 +57,71 @@
     <script>
         tinymce.init({
             selector: 'textarea',
-            menubar: false,
+            menubar: false,     
             plugins: 'lists emoticons charmap',
             toolbar: 'undo redo | fontsize | forecolor backcolor | bold italic underline strikethrough | numlist bullist indent outdent | emoticons charmap',
         });
 
         function displayImage() {
-            const imageInput = document.getElementById("imageInput");
-            const previewImage = document.getElementById("previewImage");
+            var imageInput = document.getElementById("imageInput");
+            var imagePreview = document.getElementById("imagePreview");
 
             if (imageInput.files && imageInput.files[0]) {
-                const reader = new FileReader();
+                var reader = new FileReader();
 
                 reader.onload = function (e) {
-                    previewImage.src = e.target.result;
-                    previewImage.style.display = "block";
+                    imagePreview.src = e.target.result;
+                    imagePreview.style.display = "block";
                 };
 
                 reader.readAsDataURL(imageInput.files[0]);
             }
         }
 
-        document.getElementById("titleInput").addEventListener("keydown", function(event) {
-            if (event.key === "Enter") {
-                event.preventDefault();
+        function displayYouTube() {
+            var youTubeUrl = document.getElementById('youtubeLinkInput').value;
+            var youTubePreview = document.getElementById("youTubePreview");
+            var youTubeId = getYouTubeId(youTubeUrl);
+            var thumbnailUrl = "https://img.youTube.com/vi/" + youTubeId + "/sddefault.jpg";
+            youTubePreview.src = thumbnailUrl;
+            youTubePreview.style.display = "block";
+        }
+
+        function getYouTubeId(youTubeUrl) {
+            var regex = /(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/;
+            var match = youTubeUrl.match(regex);
+            if (match && match[1]) {
+                return match[1];
+            } else {
+                return null;
             }
-        });
+        }
+
+        function setMediaSelection() {
+            var imageRadio = document.getElementById("imageRadio");
+            var imageInput = document.getElementById("imageInput");
+            var imagePreview = document.getElementById("imagePreview");
+            
+            var youTubeRadio = document.getElementById("youTubeRadio");
+            var youTubeInput = document.getElementById("youTubeInput");
+            var youTubePreview = document.getElementById("youTubePreview");
+
+            imageInput.style.display = imageRadio.checked ? "block" : "none";
+            imagePreview.style.display = imageRadio.checked ? "block" : "none";
+
+            youTubeInput.style.display = youTubeRadio.checked ? "flex" : "none";
+            youTubePreview.style.display = youTubeRadio.checked ? "block" : "none";
+        }
+
+        // Disable enter submit
+        var inputFields = document.getElementsByClassName("blockInputEnter");
+        for (var i = 0; i < inputFields.length; i++) {
+            inputFields[i].addEventListener("keydown", function(event) {
+                if (event.key === "Enter") {
+                    event.preventDefault();
+                }
+            });
+        }
 
     </script>
 }
