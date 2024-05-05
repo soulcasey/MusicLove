@@ -118,17 +118,23 @@ public class BlogController : Controller
 
     [Authorize]
     [HttpPost]
-    public IActionResult Update(Blog newBlog)
+    public IActionResult Update(int id, string newDescription)
     {
-        Blog targetBlog = blogRepository.Get(blog => blog.Id == newBlog.Id);
+        Blog targetBlog = blogRepository.Get(blog => blog.Id == id);
 
         if (targetBlog == null)
         {
-            TempData[Define.Toastr.ERROR] = "Error";
-            return View("Edit", newBlog);
+            TempData[Define.Toastr.ERROR] = "Incorrect ID";
+            return Index();
         }
 
-        targetBlog.Description = newBlog.Description; // For now, only update description
+        if (string.IsNullOrEmpty(newDescription) == true)
+        {
+            TempData[Define.Toastr.ERROR] = "Description Empty";
+            return Edit(id);
+        }
+
+        targetBlog.Description = newDescription; // For now, only update description
         blogRepository.Update(targetBlog);
         blogRepository.Save();
 
