@@ -44,6 +44,14 @@ background: #B5BEF5;
   outline-color: grey;
 }
 
+.blog-youtube {
+  width: 90%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  outline-style: solid;
+  outline-color: grey;
+}
+
 .landing-parent {
   height:100vh;
 }

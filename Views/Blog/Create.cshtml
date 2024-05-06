@@ -1,4 +1,5 @@
-@model Blog
+@using MusicLove.Enum
+@model BlogCreateViewModel
 
 @{
     ViewData["Title"] = "Create Blog";
@@ -16,38 +17,32 @@
         <div class = "mb-3 row p-1">
             <label class = "p-0">Media</label>
             <div class="container">
-                <label class="form-check-label radio-inline" for="noneRadio">
-                    <input class="form-check-input" type="radio" id="noneRadio" name="mediaType" checked onchange="setMediaSelection()">
-                    None
-                </label>
-                <label class="form-check-label radio-inline" for="imageRadio">
-                    <input class="form-check-input" type="radio" id="imageRadio" name="mediaType" onchange="setMediaSelection()">
-                    Image
-                </label>
-                <label class="form-check-label radio-inline" for="youTubeRadio">  
-                    <input class="form-check-input" type="radio" id="youTubeRadio" name="mediaType" onchange="setMediaSelection()">
-                    YouTube
-                </label>
+               @foreach (UploadType value in Enum.GetValues(typeof(UploadType)))
+                {   
+                    var id = $"{Char.ToLower(value.ToString()[0])}{value.ToString().Substring(1)}Radio";
+                    bool isChecked = Model == null ? value == UploadType.None : value == Model.UploadType;
+                    <label class="form-check-label radio-inline" for="@id">
+                        <input class="form-check-input" type="radio" name = "uploadType" asp-for = "UploadType" value ="@value" id="@id" checked="@isChecked" onchange="setMediaSelection()">
+                        @value
+                    </label>
+                }
             </div>
 
-            <input id="imageInput" type = "file" name = "file" class = "form-control" style="display: none;" onchange="displayImage()"/>
-            <img id="imagePreview" style="display:none; width: 300px; height: auto; margin-top: 15px" />
+            <input id="imageInput" type = "file" asp-for = "File" class = "form-control" style="display: none;" onchange="displayImage()"/>
+            <img id="imagePreview" style="display:none; width: 300px; height: auto; margin-top: 15px" onerror="this.src = '@Define.Azure.DEFAULT_IMAGE';"/>
 
-            
-             <div class="input-group mb-3" style="display: none;" id="youTubeInput">
-                <input type="text" id="youtubeLinkInput" class="form-control blockInputEnter">
-                <button class="btn btn-success" type="button" onclick="displayYouTube()">Add</button>
-            </div>
-            <img id="youTubePreview" style="display:none; width: 300px; height: auto; margin-top: 15px" />
+            <input id="youTubeInput" type="text" asp-for = "Link" class="form-control blockInputEnter"  style="display: none;" oninput="displayYouTube()"/>
+            <img id="youTubePreview" style="display:none; width: 300px; height: auto; margin-top: 15px" onerror="this.src = '@Define.Azure.DEFAULT_IMAGE';" />
         
         </div>
 
         <div class = "mb-3 row p-1">
             <label asp-for = "Description" class = "p-0"></label>
             <textarea asp-for = "Description" class = "form-control"></textarea>
+            <span asp-validation-for = "Description" class = "text-danger"></span>
         </div>
 
-        <button type = "submit" asp-action = "Add" method = "post" class = "btn btn-primary">
+        <button type = "submit" asp-action = "Upload" method = "post" class = "btn btn-primary">
             +
         </button>
     </div>
@@ -61,6 +56,8 @@
             plugins: 'lists emoticons charmap',
             toolbar: 'undo redo | fontsize | forecolor backcolor | bold italic underline strikethrough | numlist bullist indent outdent | emoticons charmap',
         });
+
+        setMediaSelection();
 
         function displayImage() {
             var imageInput = document.getElementById("imageInput");
@@ -79,12 +76,12 @@
         }
 
         function displayYouTube() {
-            var youTubeUrl = document.getElementById('youtubeLinkInput').value;
-            var youTubePreview = document.getElementById("youTubePreview");
-            var youTubeId = getYouTubeId(youTubeUrl);
-            var thumbnailUrl = "https://img.youTube.com/vi/" + youTubeId + "/sddefault.jpg";
-            youTubePreview.src = thumbnailUrl;
-            youTubePreview.style.display = "block";
+                var youTubeUrl = document.getElementById('youTubeInput').value;
+                var youTubePreview = document.getElementById("youTubePreview");
+                var youTubeId = getYouTubeId(youTubeUrl);
+                var thumbnailUrl = "https://img.youTube.com/vi/" + youTubeId + "/sddefault.jpg";
+                youTubePreview.src = thumbnailUrl;
+                youTubePreview.style.display = "block";
         }
 
         function getYouTubeId(youTubeUrl) {

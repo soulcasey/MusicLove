@@ -1,4 +1,5 @@
 using System;
+using System.Text.RegularExpressions;
 
 namespace MusicLove;
 
@@ -28,5 +29,23 @@ public static class Define
         public const string BLOB_CONTAINER = "musiclove";
         public const string BLOB_URL = "https://caseycha.blob.core.windows.net/musiclove/";
         public const string DEFAULT_IMAGE = "/images/NoImageAvailable.png";
+    }
+
+    public static class Youtube
+    {
+        public static bool TryGetId(string videoUrl, out string id)
+        {
+            string pattern = @"(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})";
+            Match match = Regex.Match(videoUrl, pattern);
+
+            id = match.Success ? match.Groups[1].Value : string.Empty;
+            return match.Success;
+        }
+
+        public const string EMBEDED_LINK = "https://www.youtube.com/embed/";
+        public static string GetThumbnail(string id)
+        {
+            return "https://img.youtube.com/vi/" + id + "/sddefault.jpg";
+        }
     }
 }

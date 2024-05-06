@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Security.Claims;
 using MusicLove.Azure;
 using System;
+using MusicLove.Enum;
 namespace MusicLove.Controllers;
 
 public class BlogController : Controller
@@ -83,37 +84,70 @@ public class BlogController : Controller
 
     [Authorize]
     [HttpPost]
-    public async Task<IActionResult> Add(Blog newBlog, IFormFile? file)
+    public async Task<IActionResult> Upload(BlogCreateViewModel blogCreate)
     {
         if (ModelState.IsValid == false)
         {
-            TempData[Define.Toastr.ERROR] = "Error";
-            return View("Create", newBlog);
+            TempData[Define.Toastr.ERROR] = "Missing Data";
+            return View("Create", blogCreate);
         }
-        else if (blogRepository.Exists(blog => blog.Title == newBlog.Title && blog.Id != newBlog.Id) == true)
+        else if (blogRepository.Exists(blog => blog.Title == blogCreate.Title) == true)
         {
             TempData[Define.Toastr.ERROR] = "Duplicate Title";
-            return View("Create", newBlog);
+            return View("Create", blogCreate);
         }
-        else
+
+        Blog newBlog = new Blog()
         {
-            if (file != null)
+            Title = blogCreate.Title,
+            Description = blogCreate.Description,
+            Author = User.Identity?.Name,
+            DateTime = DateTime.Now
+        };
+
+        switch (blogCreate.UploadType)
+        {
+            case UploadType.Image:
             {
-                string address = newBlog.Title.Replace(" ", "_");
+                if (blogCreate.File == null)
+                {
+                    TempData[Define.Toastr.ERROR] = "No Image Selected";
+                    return View("Create", blogCreate);
+                }
+
+                string address = blogCreate.Title.Replace(" ", "_");
                 string blobName = "Blog/" + address + ".jpg";
-                await azureStorage.UploadFile(file, blobName);
+                await azureStorage.UploadFile(blogCreate.File, blobName);
                 newBlog.Image = Define.Azure.BLOB_URL + blobName;
+                break;
             }
 
-            newBlog.Author = User.Identity.Name;
+            case UploadType.YouTube:
+            {
+                if (string.IsNullOrEmpty(blogCreate.Link) == true)
+                {
+                    TempData[Define.Toastr.ERROR] = "No Link Added";
+                    return View("Create", blogCreate);
+                }
 
-            blogRepository.Add(newBlog);
-            blogRepository.Save();
+                if (Define.Youtube.TryGetId(blogCreate.Link, out string id) == false)
+                {
+                    TempData[Define.Toastr.ERROR] = "Invalid Link";
+                    return View("Create", blogCreate);
+                }
 
-            TempData[Define.Toastr.SUCCESS] = "Added successfully";
-
-            return Index();
+                newBlog.YouTube = id;    
+                newBlog.Image = Define.Youtube.GetThumbnail(id);
+                break;
+            }
         }
+
+        blogRepository.Add(newBlog);
+        blogRepository.Save();
+
+        TempData[Define.Toastr.SUCCESS] = "Added successfully";
+
+        return Index();
     }
 
     [Authorize]
@@ -140,7 +174,7 @@ public class BlogController : Controller
 
         TempData[Define.Toastr.SUCCESS] = "Updated successfully";
 
-        return Index();
+        return Post(id);
         
     }
     

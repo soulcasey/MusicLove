@@ -16,11 +16,14 @@ public class Blog
     [DisplayName("Image")]
     public string Image { get; set; } = string.Empty;
 
+    [DisplayName("YouTube")]
+    public string YouTube { get; set; } = string.Empty;
+
     [Required]
     public required string Description { get; set; }
 
     public string? Author { get; set; } // Temporary
 
     [Required, DataType(DataType.DateTime)]
-    public DateTime DateTime { get; set; } = DateTime.Now;
+    public required DateTime DateTime { get; set; }
 }
