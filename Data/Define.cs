@@ -26,6 +26,8 @@ public static class Define
 
     public static class Azure
     {
+        public const int FILE_SIZE_LIMIT =  5 * 1024 * 1024;
+        public static readonly string[] IMAGE_FILE_FORMATS = { ".png", ".jpg", ".jpeg", ".gif" };
         public const string BLOB_CONTAINER = "musiclove";
         public const string BLOB_URL = "https://caseycha.blob.core.windows.net/musiclove/";
         public const string DEFAULT_IMAGE = "/images/NoImageAvailable.png";

@@ -1,16 +1,8 @@
-using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using MusicLove.Data;
 using MusicLove.Models;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text.Json;
 using MusicLove.Data.Repository;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using System.Security.Claims;
 using MusicLove.Azure;
-using System;
 using MusicLove.Enum;
 namespace MusicLove.Controllers;
 
@@ -112,6 +104,19 @@ public class BlogController : Controller
                 if (blogCreate.File == null)
                 {
                     TempData[Define.Toastr.ERROR] = "No Image Selected";
+                    return View("Create", blogCreate);
+                }
+                
+                string extension = Path.GetExtension(blogCreate.File.FileName).ToLowerInvariant();
+                if (Define.Azure.IMAGE_FILE_FORMATS.Contains(extension) == false)
+                {
+                    TempData[Define.Toastr.ERROR] = "Invalid Image Type";
+                    return View("Create", blogCreate);
+                }
+                
+                if (blogCreate.File.Length > Define.Azure.FILE_SIZE_LIMIT)
+                {
+                    TempData[Define.Toastr.ERROR] = "File size exceeds 5MB";
                     return View("Create", blogCreate);
                 }
 
