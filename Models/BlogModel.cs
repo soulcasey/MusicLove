@@ -12,9 +12,11 @@ public class Blog
     [Required]
     [MaxLength(20)]
     public required string Title { get; set; }
+
+    public string Thumbnail { get; set; } = string.Empty;
     
-    [DisplayName("Image")]
-    public string Image { get; set; } = string.Empty;
+    [DisplayName("Images")]
+    public ICollection<Image> Images { get; set; } = new List<Image>();
 
     [DisplayName("YouTube")]
     public string YouTube { get; set; } = string.Empty;

@@ -11,8 +11,7 @@
         <div class="container-lg">
             <a asp-area="" asp-controller="Blog" asp-action="Post" asp-route-id="@Model.Blogs[i].Id">
                 <img   
-                    src= "@Model.Blogs[i].Image"
-                    style="object-fit: cover;"
+                    src= "@Model.Blogs[i].Thumbnail"
                     class="shadow-1-strong rounded blog-image-thumbnail"
                     onerror="this.src = '@Define.Azure.DEFAULT_IMAGE';"
                 >

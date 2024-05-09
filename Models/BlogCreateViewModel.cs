@@ -15,7 +15,7 @@ public class BlogCreateViewModel
     
     public string? Link { get; set; }
     
-    public IFormFile? File { get; set; }
+    public List<IFormFile> Files { get; set; } = new List<IFormFile>(); 
 
     [Required]
     public required string Description { get; set; }

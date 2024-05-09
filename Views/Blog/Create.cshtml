@@ -28,7 +28,7 @@
                 }
             </div>
 
-            <input id="imageInput" type = "file" asp-for = "File" accept="image/*"  class = "form-control" style="display: none;" onchange="displayImage()"/>
+            <input id="imageInput" type = "file" asp-for = "Files" accept="image/*" multiple class = "form-control" style="display: none;" onchange="displayImage()"/>
             <img id="imagePreview" style="display:none; width: 300px; height: auto; margin-top: 15px" onerror="this.src = '@Define.Azure.DEFAULT_IMAGE';"/>
 
             <input id="youTubeInput" type="text" asp-for = "Link" class="form-control blockInputEnter"  style="display: none;" oninput="displayYouTube()"/>

@@ -14,16 +14,7 @@
 <div class="row">
     <div class="col-md-8 mb-4 mb-md-0">
         <div class="text-center">
-            @if (string.IsNullOrEmpty(Model.YouTube) == true)
-            {  
-                <img   
-                    src= "@Model.Image"
-                    style="object-fit: cover;"
-                    class="shadow-1-strong rounded blog-image" 
-                    onerror="this.src = '@Define.Azure.DEFAULT_IMAGE';"
-                >
-            }
-            else
+            @if (string.IsNullOrEmpty(Model.YouTube) == false)
             {
                 <iframe
                     style="object-fit: cover;"
@@ -32,8 +23,49 @@
                     title="YouTube video player"
                     frameborder="0"
                     allowfullscreen
+                    onerror="handleYouTubeError()"
                 >
                 </iframe>
+            }
+            else if (Model.Images.Count > 1)
+            {  
+                <div id="imageCarousel" class="carousel slide" data-bs-ride="carousel" style="border-radius: 20px; overflow: hidden; outline-style: solid; outline-color: grey">
+                    <div class="carousel-inner">
+                        @foreach (var image in Model.Images)
+                        {
+                            <div class="carousel-item @(image == Model.Images.First() ? "active" : "")" data-bs-interval="3000">
+                                <img 
+                                    src="@image.Url"
+                                    class="shadow-1-strong rounded blog-image" 
+                                    onerror="this.src = '@Define.Azure.DEFAULT_IMAGE';"
+                                >
+                            </div>
+                        }
+                    </div>
+                    <a class="carousel-control-prev" href="#imageCarousel" role="button" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </a>
+                    <a class="carousel-control-next" href="#imageCarousel" role="button" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </a>
+                </div>
+            }
+            else if (Model.Images.Count == 1)
+            {
+                <img   
+                    src= "@Model.Images.FirstOrDefault()?.Url"
+                    class="shadow-1-strong rounded blog-image" 
+                    onerror="this.src = '@Define.Azure.DEFAULT_IMAGE';"
+                >
+            }
+            else
+            {
+                <img   
+                    src= '@Define.Azure.DEFAULT_IMAGE'
+                    class="shadow-1-strong rounded blog-image" 
+                >
             }
         </div>
     </div>

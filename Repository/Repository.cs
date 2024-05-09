@@ -20,17 +20,17 @@ namespace MusicLove.Data.Repository
             this.dbSet = dbContext.Set<T>();
         }
 
-        public IEnumerable<T> GetAll(Expression<Func<T, bool>> filter = null, string include = null, bool isTracked = false)
+        public IEnumerable<T> GetAll(Expression<Func<T, bool>> filter = null, Func<IQueryable<T>, IQueryable<T>> include = null, bool isTracked = false)
         {
             return GetQuery(filter, include, isTracked).ToList();
         }
 
-        public T Get(Expression<Func<T, bool>> filter = null, string include = null, bool isTracked = false)
+        public T Get(Expression<Func<T, bool>> filter = null, Func<IQueryable<T>, IQueryable<T>> include = null, bool isTracked = false)
         {
             return GetQuery(filter, include, isTracked).FirstOrDefault();
         }
 
-        private IQueryable<T> GetQuery(Expression<Func<T, bool>> filter, string include, bool isTracked)
+        private IQueryable<T> GetQuery(Expression<Func<T, bool>> filter, Func<IQueryable<T>, IQueryable<T>> include, bool isTracked)
         {
             IQueryable<T> query = isTracked == true ? dbSet : dbSet.AsNoTracking();
 
@@ -39,13 +39,11 @@ namespace MusicLove.Data.Repository
                 query = query.Where(filter);
             }
 
-            if (string.IsNullOrEmpty(include) == false)
+            if (include != null)
             {
-                foreach (string value in include.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
-                {
-                    query = query.Include(value);
-                }
+                query = include(query);
             }
+            
             return query;
         }
 

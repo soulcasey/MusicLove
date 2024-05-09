@@ -4,18 +4,21 @@ using MusicLove.Data.Repository;
 using Microsoft.AspNetCore.Authorization;
 using MusicLove.Azure;
 using MusicLove.Enum;
+using Microsoft.EntityFrameworkCore;
 namespace MusicLove.Controllers;
 
 public class BlogController : Controller
 {
     private readonly IWebHostEnvironment webHostEnvironment;
     private readonly IBlogRepository blogRepository;
+    private readonly IImageRepository imageRepository;
     private readonly IAzureStorage azureStorage;
-    public BlogController(IBlogRepository blogRepository, IWebHostEnvironment webHostEnvironment, IAzureStorage azureStorage)
+    public BlogController(IBlogRepository blogRepository, IWebHostEnvironment webHostEnvironment, IAzureStorage azureStorage, IImageRepository imageRepository)
     {
         this.blogRepository = blogRepository;
         this.webHostEnvironment = webHostEnvironment;
         this.azureStorage = azureStorage;
+        this.imageRepository = imageRepository;
     }
 
     public IActionResult Index()
@@ -73,7 +76,6 @@ public class BlogController : Controller
         }
     }
 
-
     [Authorize]
     [HttpPost]
     public async Task<IActionResult> Upload(BlogCreateViewModel blogCreate)
@@ -101,29 +103,55 @@ public class BlogController : Controller
         {
             case UploadType.Image:
             {
-                if (blogCreate.File == null)
+                if (blogCreate.Files.Count == 0)
                 {
                     TempData[Define.Toastr.ERROR] = "No Image Selected";
                     return View("Create", blogCreate);
                 }
                 
-                string extension = Path.GetExtension(blogCreate.File.FileName).ToLowerInvariant();
-                if (Define.Azure.IMAGE_FILE_FORMATS.Contains(extension) == false)
+                var fileNames =  blogCreate.Files.Select(file => file.FileName);
+                List<string> extensions = fileNames.Select(fileName => Path.GetExtension(fileName).ToLowerInvariant()).ToList();
+                if (extensions.Exists(extension => Define.Azure.IMAGE_FILE_FORMATS.Contains(extension) == false))
                 {
                     TempData[Define.Toastr.ERROR] = "Invalid Image Type";
                     return View("Create", blogCreate);
                 }
                 
-                if (blogCreate.File.Length > Define.Azure.FILE_SIZE_LIMIT)
+                List<long> fileSizes = blogCreate.Files.Select(file => file.Length).ToList();
+                if (fileSizes.Exists(fileSize => fileSize > Define.Azure.FILE_SIZE_LIMIT))
                 {
                     TempData[Define.Toastr.ERROR] = "File size exceeds 5MB";
                     return View("Create", blogCreate);
                 }
+                
+                blogRepository.Add(newBlog);
+                blogRepository.Save();
 
-                string address = blogCreate.Title.Replace(" ", "_");
-                string blobName = "Blog/" + address + ".jpg";
-                await azureStorage.UploadFile(blogCreate.File, blobName);
-                newBlog.Image = Define.Azure.BLOB_URL + blobName;
+                for (int i = 0; i < blogCreate.Files.Count; i ++)
+                {
+                    IFormFile formFile = blogCreate.Files[i];
+                    string blobName = "Blog/" + blogCreate.Title.Replace(" ", "_") + $"_{i}.jpg";
+                    await azureStorage.UploadFile(formFile, blobName);
+
+                    string url = Define.Azure.BLOB_URL + blobName;
+
+                    Image image = new Image()
+                    {
+                        Url = url,
+                        BlogId = newBlog.Id,
+                    };
+
+                    imageRepository.Add(image);
+
+                    if (i == 0)
+                    {
+                        Blog blog = blogRepository.Get(blog => blog.Id == newBlog.Id, isTracked: true);
+                        blog.Thumbnail = url;
+                    }
+                }
+
+                imageRepository.Save();
+
                 break;
             }
 
@@ -141,14 +169,23 @@ public class BlogController : Controller
                     return View("Create", blogCreate);
                 }
 
-                newBlog.YouTube = id;    
-                newBlog.Image = Define.Youtube.GetThumbnail(id);
+                blogRepository.Add(newBlog);
+                blogRepository.Save();
+
+                Blog blog = blogRepository.Get(blog => blog.Id == newBlog.Id, isTracked: true);
+
+                blog.YouTube = id;
+                blog.Thumbnail = Define.Youtube.GetThumbnail(id);
+                break;
+            }
+            default:
+            {
+                blogRepository.Add(newBlog);
+                blogRepository.Save();
+
                 break;
             }
         }
-
-        blogRepository.Add(newBlog);
-        blogRepository.Save();
 
         TempData[Define.Toastr.SUCCESS] = "Added successfully";
 
@@ -185,7 +222,7 @@ public class BlogController : Controller
     
     public IActionResult Post(int id)
     {
-        Blog blogModel = blogRepository.Get(blog => blog.Id == id);
+        Blog blogModel = blogRepository.Get(filter: blog => blog.Id == id, include: query => query.Include(blog => blog.Images));
 
         if (blogModel == null)
         {
@@ -207,7 +244,13 @@ public class BlogController : Controller
         {
             blogRepository.Delete(blogModel);
             blogRepository.Save();
-            azureStorage.DeleteFile(blogModel.Image.Replace(Define.Azure.BLOB_URL, string.Empty));
+
+            foreach (Image image in blogModel.Images)
+            {
+                azureStorage.DeleteFile(image.Url.Replace(Define.Azure.BLOB_URL, string.Empty));
+                imageRepository.Delete(image);
+            }
+            imageRepository.Save();
 
             TempData[Define.Toastr.SUCCESS] = "Removed Successfully!";
             return Ok();

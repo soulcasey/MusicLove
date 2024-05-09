@@ -14,9 +14,9 @@
         </div>
         
         <div class = "mb-3 row p-1">
-            <label asp-for = "Image" class = "p-0"></label>
+            <label asp-for = "Images" class = "p-0"></label>
             <img   
-                src= "@Model.Image"
+                src= "@Model.Images.FirstOrDefault()?.Url"
                 style="width: 300px; height: auto; margin-top: 15px;"
                 onerror="this.src = '@Define.Azure.DEFAULT_IMAGE';"
                 >

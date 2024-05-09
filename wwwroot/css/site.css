@@ -37,21 +37,6 @@ background: #B5BEF5;
   background: linear-gradient(to right, #B5BEF5, #F8A0F5);
 }
 
-.blog-image {
-  width: 90%;
-  height: auto;
-  outline-style: solid;
-  outline-color: grey;
-}
-
-.blog-youtube {
-  width: 90%;
-  aspect-ratio: 16 / 9;
-  object-fit: cover;
-  outline-style: solid;
-  outline-color: grey;
-}
-
 .landing-parent {
   height:100vh;
 }
@@ -112,6 +97,20 @@ background: #B5BEF5;
 .blog-image-thumbnail {
   width: 100%;
   aspect-ratio: 4 / 3;
+  object-fit: cover;
+  outline-style: solid;
+  outline-color: grey;
+}
+
+.blog-image {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+}
+
+.blog-youtube {
+  width: 100%;
+  aspect-ratio: 16 / 9;
   object-fit: cover;
   outline-style: solid;
   outline-color: grey;

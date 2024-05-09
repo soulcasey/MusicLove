@@ -15,6 +15,7 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>(options => options.Sign
 
 builder.Services.AddRazorPages();
 builder.Services.AddScoped<IBlogRepository, BlogRepository>();
+builder.Services.AddScoped<IImageRepository, ImageRepository>();
 builder.Services.AddScoped<IEmailSender, EmailSender>();
 builder.Services.AddSingleton<IAzureStorage, AzureStorage>();
 
