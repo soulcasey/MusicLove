@@ -145,8 +145,7 @@ public class BlogController : Controller
 
                     if (i == 0)
                     {
-                        Blog blog = blogRepository.Get(blog => blog.Id == newBlog.Id, isTracked: true);
-                        blog.Thumbnail = url;
+                        newBlog.Thumbnail = url;
                     }
                 }
 
@@ -168,14 +167,11 @@ public class BlogController : Controller
                     TempData[Define.Toastr.ERROR] = "Invalid Link";
                     return View("Create", blogCreate);
                 }
-
+                
+                newBlog.YouTube = id;
+                newBlog.Thumbnail = Define.Youtube.GetThumbnail(id);
                 blogRepository.Add(newBlog);
                 blogRepository.Save();
-
-                Blog blog = blogRepository.Get(blog => blog.Id == newBlog.Id, isTracked: true);
-
-                blog.YouTube = id;
-                blog.Thumbnail = Define.Youtube.GetThumbnail(id);
                 break;
             }
             default:
@@ -222,7 +218,7 @@ public class BlogController : Controller
     
     public IActionResult Post(int id)
     {
-        Blog blogModel = blogRepository.Get(filter: blog => blog.Id == id, include: query => query.Include(blog => blog.Images));
+        Blog blogModel = blogRepository.Get(blog => blog.Id == id, query => query.Include(blog => blog.Images));
 
         if (blogModel == null)
         {
@@ -238,19 +234,18 @@ public class BlogController : Controller
     [HttpDelete]
     public IActionResult Delete(int id)
     {
-        Blog blogModel = blogRepository.Get(blog => blog.Id == id);
+        Blog blogModel = blogRepository.Get(blog => blog.Id == id, query => query.Include(blog => blog.Images));
 
         if (blogModel != null)
         {
-            blogRepository.Delete(blogModel);
-            blogRepository.Save();
-
             foreach (Image image in blogModel.Images)
             {
-                azureStorage.DeleteFile(image.Url.Replace(Define.Azure.BLOB_URL, string.Empty));
-                imageRepository.Delete(image);
+                string blogName = image.Url.Replace(Define.Azure.BLOB_URL, string.Empty);
+                azureStorage.DeleteFile(blogName);
             }
-            imageRepository.Save();
+
+            blogRepository.Delete(blogModel);
+            blogRepository.Save();
 
             TempData[Define.Toastr.SUCCESS] = "Removed Successfully!";
             return Ok();
