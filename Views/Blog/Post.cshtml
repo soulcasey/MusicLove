@@ -29,7 +29,7 @@
             }
             else if (Model.Images.Count > 1)
             {  
-                <div id="imageCarousel" class="carousel slide" data-bs-ride="carousel" style="border-radius: 20px; overflow: hidden; outline-style: solid; outline-color: grey">
+                <div id="imageCarousel" class="carousel slide mx-auto" data-bs-ride="carousel" style="border-radius: 20px; overflow: hidden; outline-style: solid; outline-color: grey;">
                     <div class="carousel-inner">
                         @foreach (var image in Model.Images)
                         {
@@ -56,6 +56,7 @@
             {
                 <img   
                     src= "@Model.Images.FirstOrDefault()?.Url"
+                    style= "outline-style: solid; outline-color: grey"
                     class="shadow-1-strong rounded blog-image" 
                     onerror="this.src = '@Define.Azure.DEFAULT_IMAGE';"
                 >
