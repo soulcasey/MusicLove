@@ -29,7 +29,13 @@
             }
             else if (Model.Images.Count > 1)
             {  
-                <div id="imageCarousel" class="carousel slide mx-auto" data-bs-ride="carousel" style="border-radius: 20px; overflow: hidden; outline-style: solid; outline-color: grey;">
+               <div id="imageCarousel" class="carousel slide mx-auto" data-bs-interval="false" style="border-radius: 20px; overflow: hidden; outline-style: solid; outline-color: grey;">
+                    <ol class="carousel-indicators" style="display: flex; justify-content: center; padding: 0; list-style-type: none; margin: 0;">
+                        @for (var i = 0; i < Model.Images.Count; i++)
+                        {
+                            <li data-bs-target="#imageCarousel" data-bs-slide-to="@i" class="@(i == 0 ? "active" : "")" style="background-color: white; border: 1px solid black; width: 12px; height: 12px; border-radius: 50%; margin: 0 5px 5px 0%;"></li>
+                        }
+                    </ol>
                     <div class="carousel-inner">
                         @foreach (var image in Model.Images)
                         {

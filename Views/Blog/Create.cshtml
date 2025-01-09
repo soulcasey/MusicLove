@@ -29,7 +29,7 @@
             </div>
 
             <input id="imageInput" type = "file" asp-for = "Files" accept="image/*" multiple class = "form-control" style="display: none;" onchange="displayImage()"/>
-            <img id="imagePreview" style="display:none; width: 300px; height: auto; margin-top: 15px" onerror="this.src = '@Define.Azure.DEFAULT_IMAGE';"/>
+            <div id="imagePreview" style="display: none; margin-top: 15px; flex-wrap: wrap;"></div>
 
             <input id="youTubeInput" type="text" asp-for = "Link" class="form-control blockInputEnter"  style="display: none;" oninput="displayYouTube()"/>
             <img id="youTubePreview" style="display:none; width: 300px; height: auto; margin-top: 15px" onerror="this.src = '@Define.Azure.DEFAULT_IMAGE';" />
@@ -63,15 +63,34 @@
             var imageInput = document.getElementById("imageInput");
             var imagePreview = document.getElementById("imagePreview");
 
-            if (imageInput.files && imageInput.files[0]) {
-                var reader = new FileReader();
+            // Clear any existing previews
+            imagePreview.innerHTML = "";
 
-                reader.onload = function (e) {
-                    imagePreview.src = e.target.result;
-                    imagePreview.style.display = "block";
-                };
+            if (imageInput.files && imageInput.files.length > 0) {
+                imagePreview.style.display = "flex"; // Show container if files are selected
 
-                reader.readAsDataURL(imageInput.files[0]);
+                for (var i = 0; i < imageInput.files.length; i++) {
+                    var file = imageInput.files[i];
+                    var reader = new FileReader();
+
+                    reader.onload = (function (file) {
+                        return function (e) {
+                            var imgElement = document.createElement("img");
+                            imgElement.src = e.target.result;
+                            imgElement.style.width = "150px";  // Set a fixed width
+                            imgElement.style.height = "auto";  // Maintain aspect ratio
+                            imgElement.style.margin = "5px";
+                            imgElement.style.objectFit = "contain";  // Ensure content fits within boundaries
+                            imgElement.alt = file.name;  // Display file name as alt text
+                            imagePreview.appendChild(imgElement);
+                        };
+                    })(file);
+
+                    reader.readAsDataURL(file);
+                }
+            }
+            else {
+                imagePreview.style.display = "none"; // Hide container if no files are selected
             }
         }
 
