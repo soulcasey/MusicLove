@@ -24,7 +24,7 @@ public class Blog
     [Required]
     public required string Description { get; set; }
 
-    public string? Author { get; set; } // Temporary
+    public string Author { get; set; } // Temporary
 
     [Required, DataType(DataType.DateTime)]
     public required DateTime DateTime { get; set; }

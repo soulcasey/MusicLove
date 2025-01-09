@@ -13,7 +13,7 @@ public class BlogCreateViewModel
 
     public UploadType UploadType { get; set; } = UploadType.None;
     
-    public string? Link { get; set; }
+    public string Link { get; set; }
     
     public List<IFormFile> Files { get; set; } = new List<IFormFile>(); 
 
