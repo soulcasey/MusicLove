@@ -24,6 +24,11 @@ public static class Define
         public const string AZURE_SQL = "AzureSQL";
     }
 
+    public static class EnvironmentVariable
+    {
+        public const string ADMIN_KEY = "AdminKey";
+    }
+
     public static class Azure
     {
         public const int FILE_SIZE_LIMIT =  5 * 1024 * 1024;
@@ -48,6 +53,16 @@ public static class Define
         public static string GetThumbnail(string id)
         {
             return "https://img.youtube.com/vi/" + id + "/sddefault.jpg";
+        }
+    }
+
+    public static class File
+    {
+        public static bool IsImage(string fileName)
+        {
+            var imageExtensions = new List<string> { ".jpg", ".jpeg", ".png", ".gif", ".bmp", ".tiff" };
+            string fileExtension = Path.GetExtension(fileName)?.ToLower();
+            return imageExtensions.Contains(fileExtension);
         }
     }
 }

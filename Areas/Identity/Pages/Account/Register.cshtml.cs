@@ -29,13 +29,16 @@ namespace MusicLove.Areas.Identity.Pages.Account
         private readonly IUserEmailStore<IdentityUser> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
+        private readonly IConfiguration _configuration;
+
 
         public RegisterModel(
             UserManager<IdentityUser> userManager,
             IUserStore<IdentityUser> userStore,
             SignInManager<IdentityUser> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            IConfiguration configuration)
         {
             _userManager = userManager;
             _userStore = userStore;
@@ -43,6 +46,7 @@ namespace MusicLove.Areas.Identity.Pages.Account
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
+            _configuration = configuration;
         }
 
         /// <summary>
@@ -102,6 +106,11 @@ namespace MusicLove.Areas.Identity.Pages.Account
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
+
+            [Required]
+            [DataType(DataType.Password)]
+            [Display(Name = "Admin Key")]
+            public string AdminKey { get; set; }
         }
 
 
@@ -115,6 +124,14 @@ namespace MusicLove.Areas.Identity.Pages.Account
         {
             returnUrl ??= Url.Content("~/");
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+            
+            string adminKeyFromEnv = _configuration[Define.EnvironmentVariable.ADMIN_KEY];
+            
+            if (Input.AdminKey != adminKeyFromEnv)
+            {
+                ModelState.AddModelError(string.Empty, "Invalid Admin Key. Contact administrator.");
+            }
+
             if (ModelState.IsValid)
             {
                 var user = CreateUser();
