@@ -1,0 +1,138 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="row">
+    <div class="col-md-6 mb-4 mb-md-0" style="display: flex; justify-content: center; align-items: center; flex-direction: column;">
+        <div class="main-logo"></div>
+    </div>
+
+    <div class="col-md-6 mb-4 mb-md-0" style="display: flex; justify-content: center; align-items: center;">
+        <div id="imageCarousel" class="carousel slide" data-bs-ride="carousel" style="width:85%; border-radius: 20px; overflow: hidden;">
+            <div class="carousel-inner">
+                <div class="carousel-item active" data-bs-interval="3000">
+                    <img src="~/images/Hallway2.jpg" style="width:100%; height:auto;">
+                </div>
+                <div class="carousel-item" data-bs-interval="3000">
+                    <img src="~/images/Piano.jpg" style="width:100%; height:auto;">
+                </div>
+                <div class="carousel-item" data-bs-interval="3000">
+                    <img src="~/images/Outside.jpeg" style="width:100%; height:auto;">
+                </div>
+            </div>
+            <a class="carousel-control-prev" href="#imageCarousel" role="button" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#imageCarousel" role="button" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </a>
+        </div>
+    </div>
+</div>
+
+<div style="margin-top: 150px;">
+    <h1 class="text-center" style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-size: 2.5rem; font-weight: bold; letter-spacing: 1px;">
+        뮤직애는 어떤 곳인가요?
+    </h1>
+    <div class="container mt-5">
+        <div class="row gx-4 gy-5">
+            <div class="col-lg-4 col-md-6 col-sm-12">
+                <img src="~/images/Teach.jpg" class="img-fluid" alt="Teach" style="border-radius: 20px;">
+                <div class="mt-4" style="font-family: 'Roboto', sans-serif; color: #333;">
+                    <h1 style="font-size: 1.75rem; font-weight: bold; color: #2c3e50;">맞춤형 레슨</h1>
+                    <p style="font-size: 1.125rem; line-height: 1.6; color: #7f8c8d;">학생부터 성인까지<br> 원하는 곡, 원하는 난이도</p>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6 col-sm-12">
+                <img src="~/images/Event.jpeg" class="img-fluid" alt="Event" style="border-radius: 20px;">
+                <div class="mt-4" style="font-family: 'Roboto', sans-serif; color: #333;">
+                    <h1 style="font-size: 1.75rem; font-weight: bold; color: #2c3e50;">정기 연주회</h1>
+                    <p style="font-size: 1.125rem; line-height: 1.6; color: #7f8c8d;">무대 위에서 빛나는 나<br> 나의 실력을 증명할 시간</p>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6 col-sm-12">
+                <img src="~/images/Teachers.png" class="img-fluid" alt="Teachers" style="border-radius: 20px;">
+                <div class="mt-4" style="font-family: 'Roboto', sans-serif; color: #333;">
+                    <h1 style="font-size: 1.75rem; font-weight: bold; color: #2c3e50;">최고의 강사진</h1>
+                    <p style="font-size: 1.125rem; line-height: 1.6; color: #7f8c8d;">음악에 열정을 더하여<br> 전문성과 따뜻한 가르침이 함께</p>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6 col-sm-12">
+                <img src="~/images/Chat.png" class="img-fluid" alt="Chat" style="border-radius: 20px;">
+                <div class="mt-4" style="font-family: 'Roboto', sans-serif; color: #333;">
+                    <h1 style="font-size: 1.75rem; font-weight: bold; color: #2c3e50;">월말 평가</h1>
+                    <p style="font-size: 1.125rem; line-height: 1.6; color: #7f8c8d;">얼마나 성장했는지 볼까요?<br> 매달 원장님의 피드백을 받아요</p>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6 col-sm-12">
+                <img src="~/images/Free.png" class="img-fluid" alt="Free" style="border-radius: 20px;">
+                <div class="mt-4" style="font-family: 'Roboto', sans-serif; color: #333;">
+                    <h1 style="font-size: 1.75rem; font-weight: bold; color: #2c3e50;">체험 수업</h1>
+                    <p style="font-size: 1.125rem; line-height: 1.6; color: #7f8c8d;">첫걸음부터 설렘 가득한 시간<br> 음악의 즐거움을 직접 경험해봐요</p>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6 col-sm-12">
+                <img src="~/images/Practice.jpg" class="img-fluid" alt="Practice" style="border-radius: 20px;">
+                <div class="mt-4" style="font-family: 'Roboto', sans-serif; color: #333;">
+                    <h1 style="font-size: 1.75rem; font-weight: bold; color: #2c3e50;">개인 연습실</h1>
+                    <p style="font-size: 1.125rem; line-height: 1.6; color: #7f8c8d;">즐거운 나만의 시간<br> 편안한 공간에서 자유로운 연습</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div style="margin-top: 100px;">
+    <h1 class="text-center" style="font-size: 2.5rem; color: #333;">
+        지금 놀러오세요!
+    </h1>
+    <div class="row mt-4">
+        <div class="col-lg-8 col-md-6 col-sm-12 mb-4 mb-md-0">
+            <div id="map" class="map" style="border-radius: 15px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);"></div>
+        </div>
+        <div class="col-lg-4 col-md-6 col-sm-12 mb-4 mb-md-0 d-flex flex-column align-items-center justify-content-center">
+            <div style="text-align: center; margin-bottom: 20px;">
+                <p style="font-size: 1.2rem; color: #666; margin: 0;">
+                    <strong>수업 시간</strong>
+                </p>
+                <p style="font-size: 1.1rem; color: #555; margin: 5px 0;">
+                    Mon ~ Fri: <strong>1:00 PM - 6:30 PM</strong><br>
+                    Sat: <strong>10:00 AM - 1:00 PM</strong>
+                </p>
+            </div>
+            <a href="https://map.kakao.com/link/map/781056700" target="_blank" style="font-size: 1.25rem; padding: 15px 30px; background: linear-gradient(90deg, #F8A0F5, #F76AB8); border-radius: 25px; text-decoration: none; color: white; font-weight: bold; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); margin-bottom: 10px;">
+                카카오맵 열기 &#8250;&#8250;
+            </a>
+            <a href="https://open.kakao.com/o/sx1Cw45c" target="_blank" style="font-size: 1.25rem; padding: 15px 30px; background: linear-gradient(90deg, #FBE300, #FBE300); border-radius: 25px; text-decoration: none; color: white; font-weight: bold; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); display: inline-flex; align-items: center; gap: 10px;">
+                <img src="~/images/kakao.png" alt="Practice" style="border-radius: 20px; height: 30px; width: auto;">
+                카톡 문의 &#8250;&#8250;
+            </a>
+        </div>
+    </div>
+</div>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=2031e02467fd8d807eee88c1d7a9b711"></script>
+<script>
+    $(document).ready(function () {
+        var carousel = $("#imageCarousel");
+        setTimeout(function () {
+            carousel.carousel("next");
+        }, 800);
+    });
+
+    var markerPosition  = new kakao.maps.LatLng(37.480926726771806,127.14228989281123); 
+    var marker = new kakao.maps.Marker({
+        position: markerPosition
+    });
+
+    var mapContainer = document.getElementById('map'), 
+    	mapOption = { 
+        center: new kakao.maps.LatLng(37.480926726771806,127.14228989281123), 
+        level: 3,
+        marker: marker 
+    };
+    var map = new kakao.maps.StaticMap(mapContainer, mapOption);
+</script>

@@ -1,0 +1,85 @@
+@{
+    ViewData["Title"] = "Blog";
+}
+<h1>@ViewData["Title"]</h1>
+
+<form asp-controller="Blog" enctype="multipart/form-data">
+
+    @if(User.Identity.IsAuthenticated)
+    {
+        <div class="mb-5 text-center">
+            <button asp-action="Create" class="btn btn-primary" type="submit">
+                Create
+            </button>
+        </div>
+    }
+
+    <div id="blogsContainer">
+        <!-- Blogs will be loaded here -->
+    </div>
+
+    <div class="mb-5 text-center">
+        <button id="loadMoreButton" class="btn btn-primary" style="width: 140px;">
+            <div id="loadingSpinner" class="spinner-border spinner-border-sm mr-2" style="display: none;" role="status"></div>
+            <div id="loadMoreText">Load More</div>
+        </button>
+    </div>
+
+</form>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    var currentCount = 0;
+    var takeCount = 6;
+
+    $(document).ready(function () {
+        // Load initial set of blogs
+        loadNextBlogs(takeCount);
+        buttonStatus(false);
+
+        // Load more blogs when button is clicked
+        $('#loadMoreButton').click(function (event) {
+            event.preventDefault(); // Prevent default form submission behavior
+            buttonStatus(false);
+            loadNextBlogs(takeCount);
+        });
+    });
+
+    // Function to load next set of blogs
+    function loadNextBlogs(take) {
+        $.ajax({
+            url: '@Url.Action("GetNextBlogs", "Blog")',
+            type: 'GET',
+            data: { skip: currentCount, take: take },
+            success: function (data) {
+                $('#blogsContainer').append(data);
+                var last = $(data).filter('#Last').val();
+                if (last === "True") {
+                    $('#loadMoreButton').hide();
+                }
+                else
+                {
+                    currentCount += take; // Increment skip for next call
+                    buttonStatus(true);
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error(xhr.responseText);
+                buttonStatus(true);
+            }
+        });
+    }
+
+    function buttonStatus(active) {
+        if (active == true) {
+            $('#loadingSpinner').hide();
+            $('#loadMoreText').show();
+            $('#loadMoreButton').prop('disabled', false);
+        }
+        else {
+            $('#loadingSpinner').show();
+            $('#loadMoreText').hide();
+            $('#loadMoreButton').prop('disabled', true);
+        }
+    }
+</script>

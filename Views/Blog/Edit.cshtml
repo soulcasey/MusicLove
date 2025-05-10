@@ -1,0 +1,46 @@
+@model Blog
+
+@{
+    ViewData["Title"] = "Edit Blog";
+}
+
+<form asp-controller = "Blog" enctype = "multipart/form-data">
+    <div class = "border p-3 mt-4">
+    
+        <div class = "mb-3 row p-1">
+            <label asp-for = "Title" class = "p-0"></label>
+            <div class="form-control">@Model.Title</div>
+            <span asp-validation-for = "Title" class = "text-danger"></span>
+        </div>
+        
+        <div class = "mb-3 row p-1">
+            <label asp-for = "Images" class = "p-0"></label>
+            <img   
+                src= "@Model.Images.FirstOrDefault()?.Url"
+                style="width: 300px; height: auto; margin-top: 15px;"
+                onerror="this.src = '@Define.Azure.DEFAULT_IMAGE';"
+                >
+        </div>
+
+        <div class = "mb-3 row p-1">
+            <label asp-for = "Description" class = "p-0"></label>
+            <textarea asp-for = "Description" name = "newDescription"  class = "form-control"></textarea>
+        </div>
+
+        <button type = "submit" asp-action = "Update" asp-route-id="@Model.Id" method = "post" class = "btn btn-primary">
+            +
+        </button>
+    </div>
+</form>
+
+@section Scripts {
+    <script>
+        tinymce.init({
+            selector: 'textarea',
+            menubar: false,
+            plugins: 'lists emoticons charmap',
+            toolbar: 'undo redo | fontsize | forecolor backcolor | bold italic underline strikethrough | numlist bullist indent outdent | emoticons charmap',
+        });
+
+    </script>
+}

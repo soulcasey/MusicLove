@@ -1,0 +1,154 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+.header {
+  padding-bottom: 110px;
+}
+
+@media (min-width:768px) {
+  .header {
+    padding-bottom: 170px;
+  }
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+}
+
+.gradient-custom {
+background: #B5BEF5;
+  background: -webkit-linear-gradient(to right, #B5BEF5, #F8A0F5);
+  background: linear-gradient(to right, #B5BEF5, #F8A0F5);
+}
+
+.landing-parent {
+  height:100vh;
+}
+
+.landing {
+  left: 0;
+  top: 0;
+  height: 100vh;
+  width: 100%;
+  position: absolute;
+  background-color: black;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: -1;
+}
+
+.main-logo {
+  width: 100%;
+  padding-top: 50%;
+  background: -webkit-linear-gradient(to right, #F8A0F5, #B5BEF5);
+  background: linear-gradient(to right, #F8A0F5, #B5BEF5);
+  -webkit-mask-image: url("/images/Logo.png");
+  mask-image: url("/images/Logo.png");
+  -webkit-mask-size: 80%;
+  mask-size: 80%;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+  padding-bottom: 50px;
+}
+
+.instrument-text {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(0, 0, 0, 0.247);
+  opacity: 0%;
+}
+
+.map {
+  width:100%;
+  aspect-ratio: 1 / 1;
+  border-radius:20px;
+}
+
+.instrument-text:hover {
+  opacity: 100%;
+}
+
+.blog-image-thumbnail {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  outline-style: solid;
+  outline-color: grey;
+}
+
+.blog-image {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+}
+
+.blog-youtube {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  outline-style: solid;
+  outline-color: grey;
+}
+
+@media (min-width:992px) {
+  .map {
+    width: 100%;
+    height: 450px;
+    border-radius:20px;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+      opacity: 0;
+      transform: translateY(20px);
+  }
+  to {
+      opacity: 1;
+      transform: translateY(0);
+  }
+}
+
+.fadeInUp {
+  animation: fadeInUp 0.75s ease-out;
+}
+
+.card {
+  border: none;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.card-body {
+  padding: 30px;
+}
+
+.card-title {
+  color: #333;
+}

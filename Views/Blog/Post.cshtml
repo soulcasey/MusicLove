@@ -1,0 +1,126 @@
+@model Blog
+
+@{
+    ViewData["Title"] = @Model.Title;
+}
+<h1>@Model.Title</h1>
+
+<p>
+    @Model.Author • @Model.DateTime.ToString("yyyy-MM-dd")
+</p>
+
+<hr style="margin: 5px 0px 50px 0px;">
+
+<div class="row">
+    <div class="col-md-8 mb-4 mb-md-0">
+        <div class="text-center">
+            @if (string.IsNullOrEmpty(Model.YouTube) == false)
+            {
+                <iframe
+                    style="object-fit: cover;"
+                    class="shadow-1-strong rounded blog-youtube" 
+                    src="@Define.Youtube.EMBEDED_LINK@Model.YouTube"
+                    title="YouTube video player"
+                    frameborder="0"
+                    allowfullscreen
+                    onerror="handleYouTubeError()"
+                >
+                </iframe>
+            }
+            else if (Model.Images.Count > 1)
+            {  
+               <div id="imageCarousel" class="carousel slide mx-auto" data-bs-interval="false" style="border-radius: 20px; overflow: hidden; outline-style: solid; outline-color: grey;">
+                    <ol class="carousel-indicators" style="display: flex; justify-content: center; padding: 0; list-style-type: none; margin: 0;">
+                        @for (var i = 0; i < Model.Images.Count; i++)
+                        {
+                            <li data-bs-target="#imageCarousel" data-bs-slide-to="@i" class="@(i == 0 ? "active" : "")" style="background-color: white; border: 1px solid black; width: 12px; height: 12px; border-radius: 50%; margin: 0 5px 5px 0%;"></li>
+                        }
+                    </ol>
+                    <div class="carousel-inner">
+                        @foreach (var image in Model.Images)
+                        {
+                            <div class="carousel-item @(image == Model.Images.First() ? "active" : "")" data-bs-interval="3000">
+                                <img 
+                                    src="@image.Url"
+                                    class="shadow-1-strong rounded blog-image" 
+                                    onerror="this.src = '@Define.Azure.DEFAULT_IMAGE';"
+                                >
+                            </div>
+                        }
+                    </div>
+                    <a class="carousel-control-prev" href="#imageCarousel" role="button" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </a>
+                    <a class="carousel-control-next" href="#imageCarousel" role="button" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </a>
+                </div>
+            }
+            else if (Model.Images.Count == 1)
+            {
+                <img   
+                    src= "@Model.Images.FirstOrDefault()?.Url"
+                    style= "outline-style: solid; outline-color: grey"
+                    class="shadow-1-strong rounded blog-image" 
+                    onerror="this.src = '@Define.Azure.DEFAULT_IMAGE';"
+                >
+            }
+            else
+            {
+                <img   
+                    src= '@Define.Azure.DEFAULT_IMAGE'
+                    class="shadow-1-strong rounded blog-image" 
+                >
+            }
+        </div>
+    </div>
+
+    <div class="col-md-4 mb-4 mb-md-0">
+        <span class="border">
+            @Html.Raw(@Model.Description)
+        </span>
+    </div>
+</div>
+
+@if(User.Identity.IsAuthenticated)
+{
+    <form asp-controller = "Blog" enctype = "multipart/form-data">
+        <div class="d-flex justify-content-center mt-4">
+            <button asp-controller="Blog" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary"style="margin-right:10px;">
+                Edit
+            </button>
+
+            <button id="deleteConfirmButton" class="btn btn-danger" onclick="deleteConfirm('@Model.Id')">
+                Delete
+            </button>
+        </div>
+    </form>
+}
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        // Prevent clicking confirm button from automatically refreshing page
+        $('#deleteConfirmButton').click(function (event) {
+            event.preventDefault(); // Prevent default form submission behavior
+        });
+    });
+
+    function deleteConfirm(id) {
+        var result = window.confirm("Are you sure you want to delete this post?");
+        if (result) {
+            $.ajax({
+                url: `/Blog/Delete/${id}`,
+                type: 'DELETE',
+                success: function (response) {
+                    window.location.href = '/Blog';
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error:', error);
+                }
+            });
+        }
+    }
+</script>
